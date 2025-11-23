@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  phonePrimary String?
+  phoneSecondary String?
+  helpLineNumber String?
+  webinars  Webinar[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Webinar {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  hostId      String
+  host        User     @relation(fields: [hostId], references: [id])
+  category    String
+  status      String   // "DRAFT", "PUBLISHED"
+  amount      Float
+  startDate   DateTime
+  endDate     DateTime
+  whatsappLink String?
+  enrollments Enrollment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  webinarId String
+  webinar   Webinar  @relation(fields: [webinarId], references: [id])
+  userEmail String   // For guest checkout or logged in user
+  paid      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
