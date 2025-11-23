@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
     const user = await currentUser();
-    if (!user) redirect("/");
+    if (!user) redirect("/sign-in");
 
     const profile = await getProfile();
     const stats = await getDashboardStats();
